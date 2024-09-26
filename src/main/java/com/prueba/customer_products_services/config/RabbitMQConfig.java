@@ -14,14 +14,4 @@ public class RabbitMQConfig {
     public Queue myQueue() {
         return new Queue("myQueue", false);
     }
-
-    @Bean
-    public DirectExchange myExchange() {
-        return new DirectExchange("myExchange");
-    }
-
-    @Bean
-    public Binding binding(Queue myQueue, DirectExchange myExchange) {
-        return BindingBuilder.bind(myQueue).to(myExchange).with("routingKey");
-    }
 }
