@@ -1,8 +1,10 @@
 package com.prueba.customer_products_services.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prueba.customer_products_services.exception.MovimientoException;
 import com.prueba.customer_products_services.repository.entity.Cuenta;
 import com.prueba.customer_products_services.repository.entity.Movimientos;
+import com.prueba.customer_products_services.service.CuentaService;
 import com.prueba.customer_products_services.service.MovimientosService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +28,9 @@ public class MovimientosControllerTest {
 
     @Mock
     private MovimientosService movimientosService;
+   @Mock
+   private CuentaService cuentaService;
 
-    @Mock
-    private RabbitTemplate rabbitTemplate;
 
     @InjectMocks
     private MovimientosController movimientosController;
@@ -40,7 +42,7 @@ public class MovimientosControllerTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void testCreate() throws Exception, MovimientoException {
         Movimientos movimientos = new Movimientos();
         movimientos.setCuenta(new Cuenta());
         movimientos.getCuenta().setCuentaId(1L);
@@ -54,7 +56,6 @@ public class MovimientosControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.saldo").value(1000));
 
-        verify(rabbitTemplate, times(1)).convertAndSend(eq("myQueue"), any(Movimientos.class));
     }
 
 

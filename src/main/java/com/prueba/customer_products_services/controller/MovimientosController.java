@@ -21,24 +21,25 @@ public class MovimientosController {
 
 
     private MovimientosService movimientosService;
-    private RabbitTemplate rabbitTemplate;
     private CuentaService cuentaService;
 
-    private String sendMessage(Movimientos movimientos) {
-        rabbitTemplate.convertAndSend("myQueue", movimientos);
-        return "Saldo enviado"+ movimientos.getSaldo();
-    }
-
-    public MovimientosController(MovimientosService movimientosService, RabbitTemplate rabbitTemplate, CuentaService cuentaService) {
+    public MovimientosController(MovimientosService movimientosService, CuentaService cuentaService) {
         this.movimientosService = movimientosService;
-        this.rabbitTemplate = rabbitTemplate;
         this.cuentaService = cuentaService;
     }
 
     @PostMapping
     public Movimientos create(@RequestBody Movimientos movimientos) throws MovimientoException, HistoricoException {
-        Movimientos newMovimiento = movimientosService.save(movimientos);
-        sendMessage(movimientos);
+        Cuenta cuenta;
+        List<Movimientos> movimientosList;
+        Movimientos newMovimiento;
+        try {
+            cuenta = cuentaService.findById(movimientos.getCuenta().getCuentaId());
+            newMovimiento = movimientosService.save(movimientos);
+        }
+        catch (Exception e) {
+            throw new MovimientoException("Cuenta no encontrada");
+        }
         return newMovimiento;
     }
 
@@ -52,7 +53,6 @@ public class MovimientosController {
                                                 @PathVariable("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) throws MovimientoException {
         return movimientosService.findByFechaBetween(startDate, endDate);
     }
-
 
     @GetMapping("/{startDate}/{endDate}/{cuentaId}")
     public ReporteMovimientos findByCuenta_CuentaIdAndFechaBetween(@PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,

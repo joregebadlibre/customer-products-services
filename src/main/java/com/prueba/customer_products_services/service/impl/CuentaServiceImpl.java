@@ -8,6 +8,8 @@ import com.prueba.customer_products_services.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CuentaServiceImpl implements CuentaService {
 
@@ -51,6 +53,17 @@ public class CuentaServiceImpl implements CuentaService {
         try
         {
             return cuentaRepository.findById(id).get();
+        }
+        catch (Exception ex) {
+            throw new CuentaException(Constants.ERROR_FIND);
+        }
+    }
+
+    @Override
+    public Optional<Cuenta> findByNumeroCuenta(String numeroCuenta) throws CuentaException {
+        try
+        {
+            return cuentaRepository.findByNumeroCuenta(numeroCuenta);
         }
         catch (Exception ex) {
             throw new CuentaException(Constants.ERROR_FIND);

@@ -35,19 +35,19 @@ public class MovimientosServiceImpl implements MovimientosService {
     @Override
     public Movimientos save(Movimientos movimientos) throws MovimientoException, HistoricoException {
 
-        Optional<Cuenta> cuenta = cuentaRepository.findById(movimientos.getCuenta().getCuentaId());
-
-        if (cuenta.isPresent()) {
+        //Optional<Cuenta> cuenta = cuentaRepository.findById(movimientos.getCuenta().getCuentaId());
+        Optional<Cuenta> cuentaNumero = cuentaRepository.findByNumeroCuenta(movimientos.getCuenta().getNumeroCuenta());
+        if (cuentaNumero.isPresent()) {
             BigDecimal saldo = BigDecimal.ZERO;
-            saldo = saldo.add( cuenta.get().getSaldoActual());
+            saldo = saldo.add( cuentaNumero.get().getSaldoActual());
 
             if (movimientos.getTipoMovimiento().equalsIgnoreCase(Constants.MOVIMIENTO_TIPO))
             {
                 BigDecimal sumaSaldo = saldo.add(movimientos.getValor());
                 movimientos.setSaldo(sumaSaldo);
-                Cuenta nuevosaldo = cuenta.get();
+                Cuenta nuevosaldo = cuentaNumero.get();
                 nuevosaldo.setSaldoActual(sumaSaldo);
-                cuentaRepository.save(cuenta.get());
+                cuentaRepository.save(cuentaNumero.get());
                 movimientos.setSaldo(sumaSaldo);
                 movimientosRepository.save(movimientos);
             }
@@ -57,9 +57,9 @@ public class MovimientosServiceImpl implements MovimientosService {
                 if (saldo.compareTo(movimientos.getValor()) >= 0 ) {
                     saldo = saldo.subtract(movimientos.getValor());
                     movimientos.setSaldo(saldo);
-                    Cuenta nuevosaldo = cuenta.get();
+                    Cuenta nuevosaldo = cuentaNumero.get();
                     nuevosaldo.setSaldoActual(saldo);
-                    cuentaRepository.save(cuenta.get());
+                    cuentaRepository.save(cuentaNumero.get());
                     movimientos.setSaldo(saldo);
                     movimientosRepository.save(movimientos);
                 }
@@ -68,6 +68,10 @@ public class MovimientosServiceImpl implements MovimientosService {
                     throw new MovimientoException(Constants.MOVIMIENTO_INSUFICIENTE_SALDO);
                 }
             }
+        }
+        else
+        {
+            throw new MovimientoException("Cuenta no encontrada");
         }
         guardarHistorico(movimientos);
         return movimientos;

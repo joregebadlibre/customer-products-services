@@ -13,11 +13,7 @@ public class Cuenta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cuentaId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "cliente_id", referencedColumnName = "clienteId")
-//    private Cliente cliente;
-
+    private Long clienteId;
     private String numeroCuenta;
     private String tipoCuenta;
     private BigDecimal saldoInicial;
