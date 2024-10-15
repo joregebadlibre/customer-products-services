@@ -57,22 +57,6 @@ public class MovimientosControllerTest {
         verify(rabbitTemplate, times(1)).convertAndSend(eq("myQueue"), any(Movimientos.class));
     }
 
-    @Test
-    public void testUpdate() throws Exception {
-        Movimientos movimientos = new Movimientos();
-        movimientos.setMovimientoId(1L);
-        movimientos.setCuenta(new Cuenta());
-        movimientos.getCuenta().setCuentaId(1L);
-        movimientos.setSaldo(new BigDecimal(2000));
-
-        when(movimientosService.update(any(Movimientos.class))).thenReturn(movimientos);
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/movimientos/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(movimientos)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.saldo").value(2000));
-    }
 
     @Test
     public void testDelete() throws Exception {

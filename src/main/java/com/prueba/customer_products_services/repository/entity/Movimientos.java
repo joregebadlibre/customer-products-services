@@ -27,4 +27,7 @@ public class Movimientos implements Serializable {
     private BigDecimal valor;
     private BigDecimal saldo;
 
+    @Transient
+    CustomError error;
+
 }
