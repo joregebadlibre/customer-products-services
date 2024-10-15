@@ -8,12 +8,12 @@ import com.prueba.customer_products_services.repository.entity.Movimientos;
 import com.prueba.customer_products_services.repository.entity.ReporteMovimientos;
 import com.prueba.customer_products_services.service.CuentaService;
 import com.prueba.customer_products_services.service.MovimientosService;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/movimientos")
@@ -31,14 +31,14 @@ public class MovimientosController {
     @PostMapping
     public Movimientos create(@RequestBody Movimientos movimientos) throws MovimientoException, HistoricoException {
         Cuenta cuenta;
-        List<Movimientos> movimientosList;
         Movimientos newMovimiento;
         try {
-            cuenta = cuentaService.findById(movimientos.getCuenta().getCuentaId());
+            cuenta = cuentaService.findByNumeroCuenta(movimientos.getCuenta().getNumeroCuenta()).orElseThrow(() -> new MovimientoException("Cuenta no encontrada"));
+            movimientos.setCuenta(cuenta);
             newMovimiento = movimientosService.save(movimientos);
         }
         catch (Exception e) {
-            throw new MovimientoException("Cuenta no encontrada");
+            throw new MovimientoException(e.getMessage()+", Movimiento no generado, Intente más tarde");
         }
         return newMovimiento;
     }
