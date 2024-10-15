@@ -14,13 +14,16 @@ public class Cuenta implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cuentaId;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", referencedColumnName = "clienteId")
-    private Cliente cliente;
+//    @ManyToOne
+//    @JoinColumn(name = "cliente_id", referencedColumnName = "clienteId")
+//    private Cliente cliente;
 
     private String numeroCuenta;
     private String tipoCuenta;
     private BigDecimal saldoInicial;
     private BigDecimal saldoActual;
     private String estado;
+
+    @Transient
+    CustomError error;
 }

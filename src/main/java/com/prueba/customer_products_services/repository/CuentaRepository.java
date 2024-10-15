@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
+    Cuenta findByCuentaId(Long cuentaId);
+    Cuenta findByNumeroCuenta(String numeroCuenta);
     List<Cuenta> findByNumeroCuenta(String numeroCuenta);
 }

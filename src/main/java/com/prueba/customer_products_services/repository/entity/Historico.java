@@ -36,4 +36,7 @@ public class Historico {
     @Column(name = "saldo")
     private BigDecimal saldo;
 
+    @Transient
+    CustomError error;
+
 }
