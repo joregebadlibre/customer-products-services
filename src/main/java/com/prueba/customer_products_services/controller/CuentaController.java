@@ -4,6 +4,7 @@ import com.prueba.customer_products_services.exception.CuentaException;
 import com.prueba.customer_products_services.exception.DatosInvalidosException;
 import com.prueba.customer_products_services.repository.entity.Cuenta;
 import com.prueba.customer_products_services.service.CuentaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +14,7 @@ public class CuentaController {
 
     private CuentaService cuentaService;
 
+    @Autowired
     public CuentaController(CuentaService clienteService) {
         this.cuentaService = clienteService;
     }

@@ -11,5 +11,4 @@ public interface CuentaService {
     Cuenta update(Cuenta cuenta) throws CuentaException;
     void delete(Long id) throws CuentaException;
     Cuenta findById(Long id) throws CuentaException;
-    List<Cuenta> fiCuentaByNumeroCuenta(String numeroCuenta);
 }

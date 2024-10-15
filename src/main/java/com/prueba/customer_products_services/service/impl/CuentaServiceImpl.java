@@ -5,8 +5,6 @@ import com.prueba.customer_products_services.repository.CuentaRepository;
 import com.prueba.customer_products_services.repository.entity.Cuenta;
 import com.prueba.customer_products_services.service.CuentaService;
 import com.prueba.customer_products_services.utils.Constants;
-
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,17 +57,4 @@ public class CuentaServiceImpl implements CuentaService {
         }
     }
 
-    @Override
-    public Cuenta findById(Long id) {
-        return cuentaRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public List<Cuenta> fiCuentaByNumeroCuenta(String numeroCuenta) {
-
-        if (numeroCuenta == null || numeroCuenta.isEmpty()) {
-            return null;
-        }
-        return cuentaRepository.findByNumeroCuenta(numeroCuenta);
-    }
 }
